@@ -1,24 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+    
+    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    
+  <style>
+  body {
+      position: relative; 
+      }
+  #section1 {padding-top:45px;height:500px;color: #fff; background-color: #1E88E5;}
+  #section2 {padding-top:15px;height:500px;color: #fff; background-color: #673ab7;}
+  #section3 {padding-top:45px;height:500px;color: #fff; background-color: #ff9800;}
+  #section41 {padding-top:45px;height:500px;color: #fff; background-color: #00bcd4;}
+  #section42 {padding-top:45px;min-height:500px;color: #fff; background-color: #009688;}
 
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-
-    
-    <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
-    
-    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    
-    <link rel="stylesheet" href="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/themes/css/cartodb.css" />
-    
-<!--    <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script> -->
+/*
+    div.scrollmenu {
+    background-color: #333;
+    overflow: auto;
+    white-space: nowrap;
+}
         
-    <style>
+    div.scrollmenu a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+}
+
+    div.scrollmenu a:hover {
+    background-color: #777;
+}
+*/
+    
+    
         html, body {
             height: 100%;
             margin: 0;
@@ -30,19 +59,27 @@
         #map {
             height: 100%;
             width: 100%;
+            position:absolute;
+        }
+        #sidebar {
+            background-color: grey;
+            height: 100%;
+            float: right;
+            width: 30%;
+            
         }
         
         .sidepanel {
+            /* EB removed absolute positioning here */
             background-color: #58595B;
             color: white;
-            position: absolute;
-            top: 46px;
-/*            right: 0;*/
-            bottom: 0;
-            width: 25%;
-            height: 100%;
+            width: 20%;
+            height: 95.75%;
             overflow: auto;
             border-right: solid black 1px;
+            margin-top: 10px;
+            position:relative;
+            
         }
         .wrapper {
             display: block;
@@ -52,54 +89,120 @@
         div.cartodb-zoom {
             margin: 20px 0 0 26%;
         }
-        
-        div.scrollmenu {
-    background-color: #333;
-    overflow: auto;
-    white-space: nowrap;
-}
-        
-        div.scrollmenu a {
-    display: inline-block;
-    color: white;
-    text-align: center;
-    padding: 14px;
-    text-decoration: none;
-}
-
-div.scrollmenu a:hover {
-    background-color: #777;
-}
- 
-
-    </style>
+      
+      .checkbox-container {
+          list-style: none;
+          padding: 0;
+      }
+      #section1 {
+          position: relative;
+      } 
+      #pic1 {
+  position: absolute;
+  top: 180px;
+  right: 50px;
+      } 
+      #pic2 {
+  position: absolute;
+  top: 1300px;
+  right: 50px;
+      }
+      
+    div.cartodb-legend {
+    position: absolute;
+    top:2250px;
+    right:100px;
+    padding-top:20px;
+    height:100px;
+    color: #fff;
+    background-color: #E7E8DE;
+        }
+      
+      div.cartodb-popup-content {
+        color:black;
     
-          <script>
+      }
+      
+/*
+    div.cartodb-legend.custom ul li
+      
+*/
+      
+      {
+          
+/*
+    position: relative;
+    margin: 0 0 7px;
+    font-size: 10px;
+    color: #666;
+    font-weight: 700;
+    font-family: Helvetica,Arial;
+    text-transform: uppercase;
+    text-align: left;
+    height: 10px;
+    line-height: 10px;
+    vertical-align: middle;
+    background-color: aliceblue;
+*/
+}
+    
+        
+</style>
+    
+<script>
               
-              
-        var dataLayer;
+    var dataLayer;
+    var dataLayerFlood;
+    var dataLayereui_1_1_1;
+    
     $(document).ready(function () {
-        cartodb.createVis('map', 'https://thenewschool.carto.com/u/whalt973/api/v2/viz/1982cebc-2480-11e7-aaeb-0e3ebc282e83/viz.json',
+    cartodb.createVis('map', 'https://thenewschool.carto.com/u/whalt973/api/v2/viz/1982cebc-2480-11e7-aaeb-0e3ebc282e83/viz.json',
                          {
             center_lat: 40.7459192,
             center_lon: -73.991922,
-            zoom: 13,
+            zoom: 11,
         
         })
-        .done(function (vis, layers) {
-            dataLayer = layers[1].getSubLayer(0);
+        
+    .done(function (vis, layers) {
             
-        var popupTemplate = '<div class="cartodb-popup v2"> <a href="#close" class="cartodb-popup-close-button close">x</a> <div class="cartodb-popup-content-wrapper"> <div class="cartodb-popup-content"> {{name}} watsan: {{total_project_cost}} {{nyceec_capital_committment}} {{project_description}} {{image}}</div> </div> <div class="cartodb-popup-tip-container"></div> </div>';   
-         dataLayer.infowindow.set('template_type', 'mustache');
-        dataLayer.infowindow.set('template', popupTemplate);    
+    dataLayerFlood = layers[1].getSubLayer(0);
+    dataLayer = layers[1].getSubLayer(1);
+    dataLayereui_1_1_1 = layers[1].getSubLayer(2);
+    dataLayer.show();
+        
+         layers[1].setInteraction(true);
+         dataLayer.set({ interactivity: 'cartodb_id, project_description, name, total_project_cost, term' });
+        
+             var popupTemplate = '<div class="cartodb-popup v2"> <a href="#close" class="cartodb-popup-close-button close">x</a> <div class="cartodb-popup-content-wrapper"> <div class="cartodb-popup-content"> {{name}}  {{total_project_cost}} {{nyceec_capital_committment}} {{project_description}} {{image}} {{term}} </div> </div> <div class="cartodb-popup-tip-container"></div> </div>';
+      dataLayer.infowindow.set('template_type', 'mustache');
+      dataLayer.infowindow.set('template', popupTemplate);
+    });
+        
+
+        
+    $('.NYCEECProj-checkbox').change(function () {
+    if ($('.NYCEECProj-checkbox').prop('checked')) {
+    dataLayer.show();
+        }
+    else {
+    dataLayer.hide();
+        }
+            
         });
+    
+
+
+        
+//    NYCEEC Projects Check Box
         
         function updateSql() {
-              var sqltype = "SELECT * FROM nyceec_geometry";
+              var sqltype = "SELECT * FROM nyceec_completed_projects_4_27";
               var whereConditions = [];
               if ($('#Cogeneration').is(':checked')) {
-                  whereConditions.push("project_description LIKE '%Cogen%'");
+                  whereConditions.push("project_description LIKE '%Cogeneration%'");
               }
+            
               if ($('#Energy-Efficiency').is(':checked')) {
                   whereConditions.push("project_description LIKE '%Energy Efficiency%'");
               }
@@ -146,38 +249,317 @@ div.scrollmenu a:hover {
               updateSql();
               
           });
+        
+
+        
+    $('.benchmark').change(function () {
+    if ($('.benchmark').prop('checked'))
+    {
+    dataLayereui_1_1_1.show();
+        }
+    else {
+    dataLayereui_1_1_1.hide();
+        }
+            
+        });
+        
+        
+         function updateEnergySql() {
+              var sqlEnergy = "SELECT * FROM eui_1_1_1";
+              var whereConditions = [];
+             
+     
+              if ($('#Multifamily Housing').is(':checked')) {
+                  whereConditions.push("right_propertytype LIKE '%Multifamily Housing%'");
+              }
+            
+              if ($('#Office').is(':checked')) {
+                  whereConditions.push("right_propertytype LIKE '%Office%'");
+              }
+            
+            if ($('#Parking').is(':checked')) {
+                  whereConditions.push("right_propertytype LIKE '%Parking%'");
+            }
+            
+            if ($('#Assembly').is(':checked')) {
+                  whereConditions.push("right_propertytype LIKE '%Assembly%'");
+            }
+             
+            if ($('#Residential').is(':checked')) {
+                  whereConditions.push("right_propertytype LIKE '%Residential%'");
+            }
+             
+               if ($('#Mercantile').is(':checked')) {
+                  whereConditions.push("right_propertytype LIKE '%Mercantile%'");
+            }
+             
+               if ($('#Healthcare').is(':checked')) {
+                  whereConditions.push("right_propertytype LIKE '%Healthcare%'");
+            }
+             
+               if ($('#Other').is(':checked')) {
+                  whereConditions.push("right_propertytype LIKE '%Other%'");
+            }
+            
+               if ($('#Industrial').is(':checked')) {
+                  whereConditions.push("right_propertytype LIKE '%Industrial%'");
+            }
+             
+                if ($('#Storage').is(':checked')) {
+                  whereConditions.push("right_propertytype LIKE '%Storage%'");
+            }
+              if ($('#Educational').is(':checked')) {
+                  whereConditions.push("right_propertytype LIKE '%Educational%'");
+                  
+              }
+                      
+                if ($('#Mixed Use').is(':checked')) {
+                  whereConditions.push("right_propertytype LIKE '%Mixed Use%'");
+                    
+            }
+              
+               if ($('#Hospital').is(':checked')) {
+                  whereConditions.push("right_propertytype LIKE '%Hospital%'");
+                   
+            }
+             
+              
+              if (whereConditions.length > 0) {
+                  sqlEnergy+= ' WHERE ' + whereConditions.join(' OR ');
+              }
+            
+              console.log(sqlEnergy);
+              dataLayereui_1_1_1.setSQL(sqlEnergy);
+         }
+        
+        
+            $('#Multifamily Housing').change(function (){
+              updateEnergySql();
+          });
+        
+          $('#Office').change(function (){
+              updateEnergySql();
+              
+          });
+        
+          $('#Parking').change(function (){
+              updateEnergySql();
+              
+          });
+        
+          $('#Assembly').change(function (){
+              updateEnergySql();
+              
+          });
+        
+          $('#Residential').change(function (){
+              updateEnergySql();
+              
+          });
+        
+          $('#Mercantile').change(function (){
+              updateEnergySql();
+              
+          });
+        
+          $('#Healthcare').change(function (){
+              updateEnergySql();
+              
+          });
+        
+          $('#Industrial').change(function (){
+              updateEnergySql();
+              
+          });
+        
+          $('#Mixed Use').change(function (){
+              updateEnergySql();
+              
+          });
+        
+          $('#Educational').change(function (){
+              updateEnergySql();
+              
+          });
+              
+            $('#Hospital').change(function (){
+              updateEnergySql();
+          });
+       
+               $('#Storage').change(function (){
+              updateEnergySql();
+    
+         });
+            
+              $('#Other').change(function (){
+              updateEnergySql();
+              });
     });
-   </script>
     
-    
+
+             
+</script>
     </head>
     
-    <body>
+    <body data-spy="scroll" data-target=".navbar" data-offset="50">
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">New York City Buildings and Energy Efficiency</a>
+    </div>
+    <div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li><a href="#section1">Home</a></li>
+          <li><a href="#section2">Reducing Emissions</a></li>
+          <li><a href="#section3">About NYCEEC</a></li>
+          <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">The Project<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#section41">About the Project</a></li>
+              <li><a href="#section42">Map</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>   
     
-<div class="scrollmenu">
-  <a href="https://twhalen17.github.io/WEEK7_buttons.html">Home</a>
-  <a href="https://twhalen17.github.io/Whalen_week5.html">NYCEEC</a>
-  <a href="#Energy Topics">Energy Topics</a>
+    <div id="section1" class="container-fluid">
+  <h1>Quick Facts</h1>
+        <br>
+<div>The impacts of climate change are evident in New York City. Sea levels are rising, temperatures are increasing, and extreme weather events are occurring more often.
+Several weather-related events in recent years have highlighted the city's vulnerability to the risks of climate change. 
+      
+      <br>
+      <br>
+      
+      
+There are approximately one million buildings in an area of little more than 300 square miles in NYC,
+      <br>
+representing roughly<span style='color:orange'> 70 percent</span> of citywide greenhouse gas (GHG) emissions
+      
+    <br>
+      <br>
+      <br>
+Air pollution from heating oil burned in New York City buildings contributes to air pollution levels that annually result in more than: <br><span style='color:orange'>3,000</span> deaths<br> <span style='color:orange'>2,000</span> hospital admissions for lung and heart conditions <br> <span style='color:orange'> 6,000</span> emergency department visits for asthma in children and adults
+      
+      <br>
+       <br>
+       <br>
+Through a series of policies and regulations, detailed below, NYC has committed to reducing its ghg emissions for all New Yorkers
+
+          
+<img id= "pic1" src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAdAAAAAJDVhZWZlNGRkLTk0NjUtNDMxMC05M2EyLWZjMGNhZDRlMTU0Ng.png">
+      
+      
+
 </div>
+  
+</div>
+<div id="section2" class="container-fluid">
+  <h1>Reducing Emissions</h1>
+  <div>
+      
+      <h3>PlaNYC:</h3> Contains an initiative to strengthen New York City's energy and building codes to make buildings more energy efficient and sustainable.
+      <br> 
+      <br>
+    
+<h3>One City: Built to Last</h3> Aims to reduce citywide emissions from energy used in buildings by 30 percent by 2025, and requires public buildings to lead by example by reducing 35 percent of emissions by 2025
+      <br>
+      <span style='font-weight:bold'>NYC Retrofit Accelerator</span>: a one-stop resource provided by the City to help owners and operators of privately owned buildings reduce operating costs and increase the sustainability of their properties through energy and water upgrades.
+      <br>
+      <br>
+    </div>
+
+<h3>Greener, Greater Buildings Plan:</h3> Targets energy efficiency in large existing buildings. GGBP consists of four regulatory pieces supplemented by job training opportunities and a financing entity called the<span style='font-weight:bold; font-size:20px'> New York City Energy Efficiency Corporation (NYCEEC)</span>:<br>
+Local Law 84: Benchmarking: annual requirement to benchmark energy and water consumption <br> 
+Local Law 85: NYC Energy Conservation Code: New York City’s local energy code<br>
+Local Law 87: Energy Audits and Retro-commissioning: conduct an energy audit and perform retro-commissioning once every 10 years <br>
+Local Law 88: Lighting and Sub-metering: by 2025, the lighting in the non-residential space be upgraded to meet code and large commercial tenants be provided with sub-meters<br>
+      <br>
+      <br>
+    </div>
+</div>
+<div id="section3" class="container-fluid">
+  <h1>About NYCEEC</h1>
+    <h4>NYCEEC is a non-profit specialty finance company that develops financing solutions to enable projects that save energy or reduce greenhouse gases</h4>
+    <br>
+  <div> New York City and New York State have been recipients of American Recovery and Reinvestment Act (ARRA) funding. The City has allocated $37 million of its ARRA funding to create the New York City Energy Efficiency Corporation (NYCEEC), which together with other financial institutions and energy services companies, provides financing solutions for energy efficiency and clean heat projects located in the five boroughs of New York City
+      <br>
+      <br>
+      NYCEEC has financed over $96 million dollars of clean energy projects across 7.2 million square feet<br>
+      NYCEEC works directly with building owners, contractors, project developers and ESCOs to provide financing solutions that increase cash flow from day one
+  <img id= "pic2" src="http://photos.prnewswire.com/prnvar/20150602/220179LOGO">    
+<img id= "pic2" src="http://photos.prnewswire.com/prnvar/20150602/220179LOGO">
+</div>
+    
+    
+</div>
+<div id="section41" class="container-fluid">
+  <h1>The Project:</h1>
+    
+    
+    <h3> The project has been developed as a resource for NYCEEC</h3><br>
+      <h4>Part 1: Projects Financed by NYCEEC- by Project Type</h4>
+    <p>Part 1 was a data collection, organization, and map design project.  The intention was to create a more visually appealing and user friendly map for internal use and potentially for NYCEEC's website. </p> <br>
+      <h4>Part 2: Spatial analysis to determine potential projects</h4>
+    <p>Currently, NYCEEC is conducting a contractor marketing strategy where the organization hopes raise awareness about NYCEEC and its products through increased interaction with contractors. I feel GIS would be especially helpful in identifying contractors and communities that would benefit from a partnership with NYCEEC.  The idea is to visually depict which buildings or areas of the city are good candidates for energy efficiency projects.  By overlaying LL84 Site EUI data with other data sets, like NYC flood zones, NYCEEC may be able to target their marketing strategy and tailor their products for specific energy efficiency projects. 
+
+</p> <br>
+   <p> The map that has been developed is the inital step towards NYCEEC utilizing GIS in house.  Several other datasets could be overlayed the Energy Usage data to highlight prime candidates for energy efficiency projects including, but not limited to; solor potential, heat/hot water complaints, affordability, etc.</p>     
+    </div>
+
         
-<!--
-    <a href="#Home">Home</a>
-    <a href="#NYCEEC">NYCEEC</a>
-    <a href="#Local-Law-84">Local Law 84</a>    
--->
+        
+<div id="section42" class="container-fluid">
+  <h1>The Map </h1>
+ 
     <div id="map"></div>
-        
-        
-        
-    <!--  sidebox-->
-        <div id="side-box" class="sidepanel" style="display:block;">
+    
+    <div class="cartodb-legend color">
+        <div class="legend-container"></div>
+        <div class="legend.custom ul li"></div>
+            <div class="legend-title">Legend</div>
+            <ul class="legend-list">
+                <li><div class="bullet" style="background-color: #81f428;"></div> NYCEEC Completed Projects</li>
+                <li><div class="bullet" style="background-color: #ff3527;"></div>Top 5% Site EUI Buildings </li>
+                <li><div class="bullet" style="background-color: #115DFF;"></div> Flood Zone</li>
+            </ul>
+        </div>
+    
+<!--    <div class="sidebar-inner"></div>-->
+   
+    <div id="side-box" class="sidepanel" style="display:block;">
         <div class="wrapper">
         <div id="title-text">
-            <h1 style="color: #7DBE31;">NYCEEC Projects</h1>
+            <h1 style="color: #7DBE31;">Energy Efficiency in NYC</h1>
             </div>
-            
-            <div id="nyceec_geometry">
+          
+            <div id="nyceec_completed_projects_4_27">
+      
+             
+            <br>
+                       
+                
+            <ul class="checkbox-container">
+                <li>
+                <label for="NYCEECProj">NYCEEC Projects</label>
+                <input id="NYCEECProj" type="checkbox" class="NYCEECProj-checkbox" checked="true" />
+                </li>
+                </ul>
             <p>View by Project Type</p>
+                    
+               
+          
+<!--            <div id="nyceec_completed_projects_4_27">-->
+           
             <div>
               
                 <input type="checkbox" id="Cogeneration">
@@ -194,23 +576,76 @@ div.scrollmenu a:hover {
                  <br>  
                  <input type="checkbox" id="Fuel-Conversion">
                      <label class="checkbox-label" for="Fuel-Conversion">Fuel Conversion</label>
-               
-            </div>
             
             </div>
+            <br>
+     
+        <div> 
+                <ul class="checkbox-container">
+                <li>
+                <label for="eui">Top 5% Site EUI Buildings</label>
+                <input id="eui" type="checkbox" class="benchmark" checked="true" />
+                    </li>
+            </ul>
+                    </div>
+                
+                  <p>View by Building Type</p>
+         <div>
+              
+                <input type="checkbox" id="Multifamily Housing">
+                     <label class="checkbox-label" for="Multifamily Housing">Multifamily Housing</label>
+                <br>
+                <input type="checkbox" id="Office">
+                     <label class="checkbox-label" for="Office">Office</label>
+                <br>                
+                <input type="checkbox" id="Parking">
+                     <label class="checkbox-label" for="Parking">Parking</label>
+                <br>    
+                 <input type="checkbox" id="Assembly">
+                     <label class="checkbox-label" for="Assembly">Assembly</label>
+                 <br>  
+                 <input type="checkbox" id="Residential">
+                     <label class="checkbox-label" for="Residential">Residential</label>
+             <br>  
+                 <input type="checkbox" id="Mercantile">
+                     <label class="checkbox-label" for="Mercantile">Mercantile</label>
+               <br>  
+                 <input type="checkbox" id="Healthcare">
+                     <label class="checkbox-label" for="Healthcare">Healthcare</label>
+               <br>  
+                 <input type="checkbox" id="Storage">
+                     <label class="checkbox-label" for="Storage">Storage</label>
+               <br>  
+                 <input type="checkbox" id="Industrial">
+                     <label class="checkbox-label" for="Industrial">Industrial</label>
+               <br>  
+                 <input type="checkbox" id="Mixed Use">
+                     <label class="checkbox-label" for="Mixed Use">Mixed Use</label>
+              <br>  
+                 <input type="checkbox" id="Educational">
+                     <label class="checkbox-label" for="Educational">Educational</label>
+              <br>  
+                 <input type="checkbox" id="Hospital">
+                     <label class="checkbox-label" for="Hospital">Hospital</label>
+             
+              <br>  
+                 <input type="checkbox" id="Other">
+                     <label class="checkbox-label" for="Other">Other</label>
             
-            
+         
+    <span class='data-name'></span>
+    </div>
+    <div>
+    <img class='data-image' />
+    </div>
+                
+                  
+                       
             </div>
         </div>
-        
-<!--
-        <div class="scrollmenu">
-  <a href="#Home">Home</a>
-  <a href="#NYCEEC">NYCEEC</a>
-  <a href="#Local-Law-84">Local Law 84</a>
-</div>
--->
-        <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script> 
-    
+    </div>
+        </div>
+                    
+  <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>      
     </body>
 </html>
