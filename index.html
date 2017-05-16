@@ -21,10 +21,10 @@
       position: relative; 
       }
   #section1 {padding-top:45px;height:500px;color: #fff; background-color: #1E88E5;}
-  #section2 {padding-top:15px;height:500px;color: #fff; background-color: #673ab7;}
+  #section2 {padding-top:25px;height:500px;color: #fff; background-color: #673ab7;}
   #section3 {padding-top:45px;height:500px;color: #fff; background-color: #ff9800;}
-  #section41 {padding-top:45px;height:500px;color: #fff; background-color: #00bcd4;}
-  #section42 {padding-top:45px;min-height:500px;color: #fff; background-color: #009688;}
+  #section41 {padding-top:27px;height:500px;color: #fff; background-color: #00bcd4;}
+  #section42 {padding-top:15px;min-height:500px;color: #fff; background-color: #009688;}
 
     
 /*
@@ -118,10 +118,21 @@
     background-color: #E7E8DE;
         }
       
-      div.cartodb-popup-content {
-        color:black;
-    
-      }
+    div.cartodb-popup-content { 
+    font-size: 12px; 
+    color: #178236;
+    }
+      
+  div.cartodb-popup div.cartodb-popup-content-wrapper 
+  width:407px; 
+  max-width:407px; 
+  padding:0 5px; 
+  }
+      
+  div.cartodb-popup.v2 div.cartodb-popup-tip-container 
+  width:500px;
+  height:400px;
+  }
       
 /*
     div.cartodb-legend.custom ul li
@@ -172,15 +183,21 @@
     dataLayer.show();
         
          layers[1].setInteraction(true);
-         dataLayer.set({ interactivity: 'cartodb_id, project_description, name, total_project_cost, term' });
+         dataLayer.set({ interactivity: 'cartodb_id, total_project_cost, project_description, name, measures, financial_product' });
         
-             var popupTemplate = '<div class="cartodb-popup v2"> <a href="#close" class="cartodb-popup-close-button close">x</a> <div class="cartodb-popup-content-wrapper"> <div class="cartodb-popup-content"> {{name}}  {{total_project_cost}} {{nyceec_capital_committment}} {{project_description}} {{image}} {{term}} </div> </div> <div class="cartodb-popup-tip-container"></div> </div>';
+             var popupTemplate = '<div class="cartodb-popup v2"> <a href="#close" class="cartodb-popup-close-button close">x</a> <div class="cartodb-popup-content-wrapper"> <div class="cartodb-popup-content">Project Name: {{name}}<br><br> Total Project Cost($): {{total_project_cost}} <br><br> Project Description: {{project_description}} <br><br> Other Measures: {{measures}} <br><br> Financial Product: {{financial_product}} </div> </div> <div class="cartodb-popup-tip-container"></div> </div>';
       dataLayer.infowindow.set('template_type', 'mustache');
       dataLayer.infowindow.set('template', popupTemplate);
+    
+     layers[1].setInteraction(true);
+         dataLayereui_1_1_1.set({ interactivity: 'cartodb_id, ownername, totalghg, siteeui, fulladdress'});
+        
+             var popupTemplate2 = '<div class="cartodb-popup v2"> <a href="#close" class="cartodb-popup-close-button close">x</a> <div class="cartodb-popup-content-wrapper"> <div class="cartodb-popup-content">Property Owner Name: {{ownername}} <br><br> Address: {{fulladdress}} <br><br>Site EUI (kBtu): {{siteeui}} <br><br> Total GHG (tons): {{totalghg}} </div> </div> <div class="cartodb-popup-tip-container"></div> </div>';
+      dataLayereui_1_1_1.infowindow.set('template_type', 'mustache');
+      dataLayereui_1_1_1.infowindow.set('template', popupTemplate2);
     });
-        
-
-        
+    
+    
     $('.NYCEECProj-checkbox').change(function () {
     if ($('.NYCEECProj-checkbox').prop('checked')) {
     dataLayer.show();
@@ -269,7 +286,7 @@
               var whereConditions = [];
              
      
-              if ($('#Multifamily Housing').is(':checked')) {
+              if ($('#Multifamily_Housing').is(':checked')) {
                   whereConditions.push("right_propertytype LIKE '%Multifamily Housing%'");
               }
             
@@ -299,10 +316,7 @@
              
                if ($('#Other').is(':checked')) {
                   whereConditions.push("right_propertytype LIKE '%Other%'");
-            }
-            
-               if ($('#Industrial').is(':checked')) {
-                  whereConditions.push("right_propertytype LIKE '%Industrial%'");
+           
             }
              
                 if ($('#Storage').is(':checked')) {
@@ -310,17 +324,9 @@
             }
               if ($('#Educational').is(':checked')) {
                   whereConditions.push("right_propertytype LIKE '%Educational%'");
-                  
-              }
-                      
-                if ($('#Mixed Use').is(':checked')) {
-                  whereConditions.push("right_propertytype LIKE '%Mixed Use%'");
+            
                     
-            }
-              
-               if ($('#Hospital').is(':checked')) {
-                  whereConditions.push("right_propertytype LIKE '%Hospital%'");
-                   
+      
             }
              
               
@@ -333,7 +339,7 @@
          }
         
         
-            $('#Multifamily Housing').change(function (){
+            $('#Multifamily_Housing').change(function (){
               updateEnergySql();
           });
         
@@ -366,24 +372,12 @@
               updateEnergySql();
               
           });
-        
-          $('#Industrial').change(function (){
-              updateEnergySql();
-              
-          });
-        
-          $('#Mixed Use').change(function (){
-              updateEnergySql();
-              
-          });
+    
         
           $('#Educational').change(function (){
               updateEnergySql();
               
-          });
-              
-            $('#Hospital').change(function (){
-              updateEnergySql();
+    
           });
        
                $('#Storage').change(function (){
@@ -393,8 +387,10 @@
             
               $('#Other').change(function (){
               updateEnergySql();
+                  
               });
     });
+    
     
 
              
@@ -443,7 +439,7 @@ Several weather-related events in recent years have highlighted the city's vulne
       
 There are approximately one million buildings in an area of little more than 300 square miles in NYC,
       <br>
-representing roughly<span style='color:orange'> 70 percent</span> of citywide greenhouse gas (GHG) emissions
+representing roughly<span style='color:orange'> 70 percent</span> of citywide greenhouse gas (GHG) emissions.
       
     <br>
       <br>
@@ -453,7 +449,7 @@ Air pollution from heating oil burned in New York City buildings contributes to 
       <br>
        <br>
        <br>
-Through a series of policies and regulations, detailed below, NYC has committed to reducing its ghg emissions for all New Yorkers
+Through a series of policies and regulations, detailed below, NYC has committed to reducing its ghg emissions for all New Yorkers.
 
           
 <img id= "pic1" src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAdAAAAAJDVhZWZlNGRkLTk0NjUtNDMxMC05M2EyLWZjMGNhZDRlMTU0Ng.png">
@@ -469,16 +465,16 @@ Through a series of policies and regulations, detailed below, NYC has committed 
       
       <h3>PlaNYC:</h3> Contains an initiative to strengthen New York City's energy and building codes to make buildings more energy efficient and sustainable.
       <br> 
-      <br>
+      
     
 <h3>One City: Built to Last</h3> Aims to reduce citywide emissions from energy used in buildings by 30 percent by 2025, and requires public buildings to lead by example by reducing 35 percent of emissions by 2025
       <br>
       <span style='font-weight:bold'>NYC Retrofit Accelerator</span>: a one-stop resource provided by the City to help owners and operators of privately owned buildings reduce operating costs and increase the sustainability of their properties through energy and water upgrades.
       <br>
-      <br>
+    
     </div>
 
-<h3>Greener, Greater Buildings Plan:</h3> Targets energy efficiency in large existing buildings. GGBP consists of four regulatory pieces supplemented by job training opportunities and a financing entity called the<span style='font-weight:bold; font-size:20px'> New York City Energy Efficiency Corporation (NYCEEC)</span>:<br>
+<h3>Greener, Greater Buildings Plan:</h3> Targets energy efficiency in large existing buildings. GGBP consists of four regulatory pieces supplemented by job training opportunities and a financing entity called the<span style='font-weight:bold; font-size:20px; color: yellow'> New York City Energy Efficiency Corporation (NYCEEC)</span>:<br>
 Local Law 84: Benchmarking: annual requirement to benchmark energy and water consumption <br> 
 Local Law 85: NYC Energy Conservation Code: New York City’s local energy code<br>
 Local Law 87: Energy Audits and Retro-commissioning: conduct an energy audit and perform retro-commissioning once every 10 years <br>
@@ -486,7 +482,6 @@ Local Law 88: Lighting and Sub-metering: by 2025, the lighting in the non-reside
       <br>
       <br>
     </div>
-</div>
 <div id="section3" class="container-fluid">
   <h1>About NYCEEC</h1>
     <h4>NYCEEC is a non-profit specialty finance company that develops financing solutions to enable projects that save energy or reduce greenhouse gases</h4>
@@ -513,7 +508,9 @@ Local Law 88: Lighting and Sub-metering: by 2025, the lighting in the non-reside
     <p>Currently, NYCEEC is conducting a contractor marketing strategy where the organization hopes raise awareness about NYCEEC and its products through increased interaction with contractors. I feel GIS would be especially helpful in identifying contractors and communities that would benefit from a partnership with NYCEEC.  The idea is to visually depict which buildings or areas of the city are good candidates for energy efficiency projects.  By overlaying LL84 Site EUI data with other data sets, like NYC flood zones, NYCEEC may be able to target their marketing strategy and tailor their products for specific energy efficiency projects. 
 
 </p> <br>
-   <p> The map that has been developed is the inital step towards NYCEEC utilizing GIS in house.  Several other datasets could be overlayed the Energy Usage data to highlight prime candidates for energy efficiency projects including, but not limited to; solor potential, heat/hot water complaints, affordability, etc.</p>     
+   <p> The map that has been developed is the inital step towards NYCEEC utilizing GIS in house.  Several other datasets could be overlayed the Energy Usage data to highlight prime candidates for energy efficiency projects including, but not limited to; solor potential, heat/hot water complaints, affordability, etc.</p> 
+    
+    <span style='font-size: 9px'>Sources: Sandy Inundation Zone. (2015, November 9). Retrieved April, 2017, from https://data.cityofnewyork.us/Environment/Sandy-Inundation-Zone/uyj8-7rv5 >br> Energy and Waste Disclosure for Local Law (2014). (2015, December 8). Retrieved May 1, 2017, from https://data.cityofnewyork.us/Environment/Energy-and-Water-Data-Disclosure-for-Local-Law-201/jzst-u7j8 <br> NYCEEC. (2015). Retrieved March, 2017, from https://nyceec.com/ </span>
     </div>
 
         
@@ -592,8 +589,8 @@ Local Law 88: Lighting and Sub-metering: by 2025, the lighting in the non-reside
                   <p>View by Building Type</p>
          <div>
               
-                <input type="checkbox" id="Multifamily Housing">
-                     <label class="checkbox-label" for="Multifamily Housing">Multifamily Housing</label>
+                <input type="checkbox" id="Multifamily_Housing">
+                     <label class="checkbox-label" for="Multifamily_Housing">Multifamily Housing</label>
                 <br>
                 <input type="checkbox" id="Office">
                      <label class="checkbox-label" for="Office">Office</label>
@@ -615,18 +612,10 @@ Local Law 88: Lighting and Sub-metering: by 2025, the lighting in the non-reside
                <br>  
                  <input type="checkbox" id="Storage">
                      <label class="checkbox-label" for="Storage">Storage</label>
-               <br>  
-                 <input type="checkbox" id="Industrial">
-                     <label class="checkbox-label" for="Industrial">Industrial</label>
-               <br>  
-                 <input type="checkbox" id="Mixed Use">
-                     <label class="checkbox-label" for="Mixed Use">Mixed Use</label>
+             
               <br>  
                  <input type="checkbox" id="Educational">
                      <label class="checkbox-label" for="Educational">Educational</label>
-              <br>  
-                 <input type="checkbox" id="Hospital">
-                     <label class="checkbox-label" for="Hospital">Hospital</label>
              
               <br>  
                  <input type="checkbox" id="Other">
